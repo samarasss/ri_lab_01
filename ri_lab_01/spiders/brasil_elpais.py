@@ -18,7 +18,7 @@ class BrasilElpaisSpider(scrapy.Spider):
                 data = json.load(json_file)
         self.start_urls = list(data.values())
 
-    def new(self, response):
+    def newPage(self, response):
         # pdb.set_trace()
         yield{
                 'title': response.css('h1.articulo-titulo::text').get(),
@@ -31,20 +31,12 @@ class BrasilElpaisSpider(scrapy.Spider):
             }
 
     def parse(self, response):
-        
-
         for articulo in response.css('div.articulo__interior '):
             h2 = articulo.css('h2')[0]
             a = h2.css('a')[0]
-            # uri = response.urljoin(a.attrib['href'])
-
-            yield response.follow(a.attrib['href'], callback = self.new)
+            yield response.follow(a.attrib['href'], callback = self.newPage)
 
 
       
-        # page = response.url.split("/")[-2]
-        # filename = 'quotes-%s.html' % page
-        # with open(filename, 'wb') as f:
-        #     f.write(response.body)
-        # self.log('Saved file %s' % filename)
+     
        
